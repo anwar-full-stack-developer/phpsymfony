@@ -1,0 +1,11 @@
+csv_parser:
+    resource: "@CsvParserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+csv_prser:
+    resource: "@CsvPrserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation

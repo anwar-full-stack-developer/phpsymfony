@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  #PHP Service
+  php:
+    build:
+      context: .
+      dockerfile: ./php-fpm/7.2/Dockerfile
+    image: phpsymfony/php72
+    container_name: phpsymfony
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: phpsymfonyapp
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./www:/var/www
+      - ./php-fpm/7.2/local.ini:/usr/local/etc/php-fpm/conf.d/local.ini
+    ports:
+      - "9000:9000"
+
+    networks:
+      - app-network
+
+  #Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: phpsymfony_nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8083:80"
+      - "4483:443"
+    volumes:
+      - ./www:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
